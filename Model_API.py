@@ -20,6 +20,12 @@ class Keras3To2Unpickler(pickle.Unpickler):
 with open("tokenizer.pkl", "rb") as f:
     tokenizer = Keras3To2Unpickler(f).load()
 
+# WARMUP TENSORFLOW TO PREVENT GUNICORN TIMEOUT
+import numpy as np
+print("Warming up model...")
+_ = model.predict(np.zeros((1, 100)))
+print("Model warm up complete!")
+
 # PREPROCESS FUNCTION
 def preprocess(text):
     text = text.lower()
